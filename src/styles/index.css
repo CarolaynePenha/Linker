@@ -1,0 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+.root {
+  width: 100%;
+  height: fit-content;
+  min-height: 100vh;
+  font-family: "Roboto", sans-serif;
+}
+body {
+  background-color: #bba79c;
+}
+
+/* font-family: 'Murecho', sans-serif;
+  font-family: 'Young Serif', serif; */
