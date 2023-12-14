@@ -2,21 +2,26 @@ import styled from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { TokenProvider } from "../context/TokenContext";
+import { UserProvider } from "../context/UserContext";
 
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
+import Timeline from "./Timeline";
 
 function App() {
   return (
     <DivApp>
-      <TokenProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/signUp" element={<SignUp />} />
-            <Route path="/signIn" element={<SignIn />} />
-          </Routes>
-        </BrowserRouter>
-      </TokenProvider>
+      <UserProvider>
+        <TokenProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/signUp" element={<SignUp />} />
+              <Route path="/" element={<SignIn />} />
+              <Route path="/timeline" element={<Timeline />} />
+            </Routes>
+          </BrowserRouter>
+        </TokenProvider>
+      </UserProvider>
     </DivApp>
   );
 }
