@@ -11,6 +11,7 @@ export function UserProvider({ children }) {
     initialUser = userInfos;
   }
   const [user, setUser] = useState(initialUser);
+  console.log("user: ", user);
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
