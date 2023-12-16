@@ -105,6 +105,7 @@ export default function SignUp() {
             />
             <input
               type="url"
+              disabled={buttonState}
               required
               placeholder="Imagem"
               value={image}
