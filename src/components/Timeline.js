@@ -1,20 +1,27 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
 import Header from "./Header";
 import TokenContext from "../context/TokenContext";
+import logOut from "../utils";
+import UserContext from "../context/UserContext";
+import Post from "./Post";
 
 export default function Timeline() {
   const [buttonState, setButtonState] = useState(false);
   const [buttonLoading, setButtonLoading] = useState("Publicar");
-  const { token } = useContext(TokenContext);
+  const { token, setToken } = useContext(TokenContext);
+  const { setUser } = useContext(UserContext);
+  const [posts, setPosts] = useState(false);
   const [infoPost, setInfoPost] = useState({
     url: "",
     description: "",
   });
   const navigate = useNavigate();
+  const [updatePosts, setUpdatePosts] = useState(false);
+
   const { url, description } = infoPost;
 
   async function post(event) {
@@ -27,17 +34,16 @@ export default function Timeline() {
         Authorization: `Bearer ${token}`,
       },
     };
-
     try {
       if (infoPost.description.length > 0) {
         const response = await axios.post(URL, infoPost, config);
       } else {
         const response = await axios.post(URL, { url }, config);
       }
-
       setButtonState(false);
       setButtonLoading("Publicar");
       setInfoPost({ url: "", description: "" });
+      setUpdatePosts(!updatePosts);
     } catch (err) {
       console.log(err.response);
       setButtonState(false);
@@ -45,6 +51,29 @@ export default function Timeline() {
       alert("Houve um erro ao publicar seu link!");
     }
   }
+
+  useEffect(() => {
+    if (token) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      async function getPosts() {
+        const URL = process.env.REACT_APP_API_URL + "/timeline";
+        try {
+          const { data } = await axios.get(URL, config);
+          console.log("dataGet: ", data);
+          setPosts(data);
+        } catch (err) {
+          console.log(err.response);
+        }
+      }
+      getPosts();
+    } else {
+      logOut(setToken, setUser, navigate);
+    }
+  }, [token, updatePosts]);
 
   return (
     <>
@@ -84,9 +113,12 @@ export default function Timeline() {
             </button>
           </form>
         </section>
-        <article>
-          <div className="side-bar">img</div>
-        </article>
+        {posts[0] &&
+          posts.map((post, index) => {
+            return <Post key={index} post={post} />;
+          })}
+        {posts.length === 0 && <p>Não há nenhum post ainda.</p>}
+        {!posts && <p>Carregando...</p>}
       </DivTimeline>
     </>
   );
@@ -99,6 +131,9 @@ const DivTimeline = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  p {
+    margin-top: 12vh;
+  }
   strong {
     font-family: "Abril Fatface", serif;
     font-size: 35px;
@@ -108,6 +143,7 @@ const DivTimeline = styled.div`
   section {
     width: 100%;
     position: relative;
+    margin: 20px 0px;
     form {
       display: flex;
       flex-direction: column;
@@ -140,9 +176,15 @@ const DivTimeline = styled.div`
       p {
         font-size: 25px;
         padding: 15px 0px;
+        margin-top: 0px;
         font-style: italic;
         color: #544f5e;
       }
     }
   }
 `;
+// const TimelineContainer = styled.div`
+//   position: relative;
+//   height: fit-content;
+//   top: 0;
+// `;

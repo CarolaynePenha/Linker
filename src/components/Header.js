@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import UserContext from "../context/UserContext";
 import TokenContext from "../context/TokenContext";
+import logOut from "../utils";
 
 export default function Header() {
   const { token, setToken } = useContext(TokenContext);
@@ -17,24 +18,12 @@ export default function Header() {
     user: { image },
   } = useContext(UserContext);
 
-  function logOut() {
-    setToken(null);
-    setUser("");
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/");
-  }
-
   return (
-    <Conteiner>
+    <ConteinerHeader>
       <p>
         <strong>Linker </strong>
       </p>
-      <DivMenu
-        onFocus={() => {
-          console.log("blur");
-        }}
-      >
+      <DivMenu>
         {menuOpen ? (
           <>
             <div className="menuUp" onClick={() => setMenuOpen(!menuOpen)}>
@@ -42,7 +31,7 @@ export default function Header() {
               <img src={image} alt="userImage" />
             </div>
             <div className="logout">
-              <p onClick={() => logOut()}>Logout</p>
+              <p onClick={() => logOut(setToken, setUser, navigate)}>Logout</p>
             </div>
           </>
         ) : (
@@ -52,14 +41,15 @@ export default function Header() {
           </div>
         )}
       </DivMenu>
-    </Conteiner>
+    </ConteinerHeader>
   );
 }
 
 // -------------------css
 
-const Conteiner = styled.div`
-  position: relative;
+const ConteinerHeader = styled.div`
+  position: fixed;
+  top: 0;
   width: 100%;
   height: 10vh;
   display: flex;
@@ -67,6 +57,7 @@ const Conteiner = styled.div`
   justify-content: space-between;
   background-color: #272330;
   padding: 0 15px;
+  z-index: 1;
   p {
     max-width: 90%;
     margin-bottom: 10px;
@@ -79,10 +70,10 @@ const Conteiner = styled.div`
     font-family: "Abril Fatface", serif;
   }
 `;
-const DivMenu = styled.menu`
+const DivMenu = styled.div`
   position: fixed;
   top: 2%;
-  right: 0px;
+  right: 10px;
   width: 28%;
   display: flex;
   flex-direction: column;
@@ -90,6 +81,8 @@ const DivMenu = styled.menu`
   align-items: center;
   background-color: #272330;
   border-bottom-left-radius: 40px;
+  z-index: 2;
+
   .menuUp {
     padding-bottom: 15px;
     padding-right: 10px;
