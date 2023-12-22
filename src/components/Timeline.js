@@ -58,7 +58,7 @@ export default function Timeline() {
     if (token) {
       async function getPosts() {
         setLoading(true);
-        console.log("loading:", loading);
+
         const URL = process.env.REACT_APP_API_URL + "/timeline";
         const config = {
           headers: {
@@ -69,7 +69,6 @@ export default function Timeline() {
           const { data } = await axios.get(URL, config);
           console.log("dataGet: ", data);
           setLoading(false);
-          console.log("loading:", loading);
           setPosts(data);
         } catch (err) {
           console.log(err.response);
@@ -80,8 +79,6 @@ export default function Timeline() {
       logOut(setToken, setUser, navigate);
     }
   }, [token, updatePosts]);
-
-  console.log("updatePosts: ", updatePosts);
 
   return (
     <>
@@ -200,8 +197,3 @@ const DivTimeline = styled.div`
     }
   }
 `;
-// const TimelineContainer = styled.div`
-//   position: relative;
-//   height: fit-content;
-//   top: 0;
-// `;

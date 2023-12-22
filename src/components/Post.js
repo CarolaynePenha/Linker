@@ -1,12 +1,11 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
 import { FaRegHeart } from "react-icons/fa6";
 import { LuPencilLine } from "react-icons/lu";
-import { FaRegTrashCan } from "react-icons/fa6";
+
 import TokenContext from "../context/TokenContext";
-import UserContext from "../context/UserContext";
+import DeletePost from "./Modal";
 
 export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
   const inputElement = useRef();
@@ -48,7 +47,7 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
     } catch (err) {
       console.log(err.response);
       setButtonState(false);
-      alert("Houve um erro ao atualizar seu link!");
+      alert("Houve um erro ao atualizar seu post!");
     }
   }
 
@@ -75,9 +74,12 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
                   color="white"
                 />
               </div>
-              <div className="trash">
-                <FaRegTrashCan color="white" />
-              </div>
+              <DeletePost
+                post={post}
+                updatePosts={updatePosts}
+                setUpdatePosts={setUpdatePosts}
+                loading={loading}
+              />
             </>
           ) : (
             ""
@@ -87,7 +89,6 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
           <form onSubmit={editPost}>
             <textarea
               onKeyDown={(e) => {
-                console.log("e: ", e);
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   editPost();
@@ -107,7 +108,6 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
         ) : (
           <p className="description">{post.description}</p>
         )}
-
         <a href={post.url} target="_blank">
           {post.imageMetadata && (
             <img src={post.imageMetadata} alt="imagem do post" />
