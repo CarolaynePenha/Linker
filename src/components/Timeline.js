@@ -5,8 +5,9 @@ import { useContext, useState, useEffect } from "react";
 
 import Header from "./Header";
 import TokenContext from "../context/TokenContext";
-import logOut from "../utils";
+import { logOut } from "../utils";
 import UserContext from "../context/UserContext";
+
 import Post from "./Post";
 
 export default function Timeline() {
@@ -21,6 +22,7 @@ export default function Timeline() {
   });
   const navigate = useNavigate();
   const [updatePosts, setUpdatePosts] = useState(false);
+  const [loading, setLoading] = useState();
 
   const { url, description } = infoPost;
 
@@ -54,16 +56,20 @@ export default function Timeline() {
 
   useEffect(() => {
     if (token) {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       async function getPosts() {
+        setLoading(true);
+        console.log("loading:", loading);
         const URL = process.env.REACT_APP_API_URL + "/timeline";
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
         try {
           const { data } = await axios.get(URL, config);
           console.log("dataGet: ", data);
+          setLoading(false);
+          console.log("loading:", loading);
           setPosts(data);
         } catch (err) {
           console.log(err.response);
@@ -74,6 +80,8 @@ export default function Timeline() {
       logOut(setToken, setUser, navigate);
     }
   }, [token, updatePosts]);
+
+  console.log("updatePosts: ", updatePosts);
 
   return (
     <>
@@ -115,7 +123,16 @@ export default function Timeline() {
         </section>
         {posts[0] &&
           posts.map((post, index) => {
-            return <Post key={index} post={post} />;
+            return (
+              <Post
+                key={index}
+                post={post}
+                updatePosts={updatePosts}
+                setUpdatePosts={setUpdatePosts}
+                setPosts={setPosts}
+                loading={loading}
+              />
+            );
           })}
         {posts.length === 0 && <p>Não há nenhum post ainda.</p>}
         {!posts && <p>Carregando...</p>}

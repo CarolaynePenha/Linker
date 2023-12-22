@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 import UserContext from "../context/UserContext";
 import TokenContext from "../context/TokenContext";
-import logOut from "../utils";
+import { logOut } from "../utils";
 
 export default function Header() {
-  const { token, setToken } = useContext(TokenContext);
-  const { user, setUser } = useContext(UserContext);
+  const { setToken } = useContext(TokenContext);
+  const { setUser } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 

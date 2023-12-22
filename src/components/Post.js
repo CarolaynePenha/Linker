@@ -1,7 +1,57 @@
-import { FaRegHeart } from "react-icons/fa6";
+import { useRef, useState, useEffect, useContext } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
-export default function Post({ post }) {
+import { FaRegHeart } from "react-icons/fa6";
+import { LuPencilLine } from "react-icons/lu";
+import { FaRegTrashCan } from "react-icons/fa6";
+import TokenContext from "../context/TokenContext";
+import UserContext from "../context/UserContext";
+
+export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
+  const inputElement = useRef();
+  const [editable, setEditable] = useState(false);
+  const [buttonState, setButtonState] = useState(false);
+  const [description, setDescriptiont] = useState(post.description);
+  const { token } = useContext(TokenContext);
+
+  const focusInput = () => {
+    inputElement.current.focus();
+  };
+
+  useEffect(() => {
+    if (editable) {
+      focusInput();
+    }
+  }, [editable]);
+
+  useEffect(() => {
+    if (!loading) {
+      setEditable(false);
+      setDescriptiont("");
+    }
+  }, [loading]);
+
+  async function editPost(e) {
+    e?.preventDefault();
+    setButtonState(true);
+    const { id } = post;
+    const URL = process.env.REACT_APP_API_URL + `/timeline/${id}`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const response = await axios.put(URL, { description }, config);
+      setUpdatePosts(!updatePosts);
+    } catch (err) {
+      console.log(err.response);
+      setButtonState(false);
+      alert("Houve um erro ao atualizar seu link!");
+    }
+  }
+
   return (
     <Article>
       <div className="side-bar">
@@ -10,10 +60,54 @@ export default function Post({ post }) {
         <p>{post.likes} likes</p>
       </div>
       <div className="container">
-        <p>
-          <strong>{post.name}</strong>{" "}
-        </p>
-        <p className="description">{post.description}</p>
+        <div className="post-top">
+          <p>
+            <strong>{post.name}</strong>
+          </p>
+          {post.postUserId === post.userId ? (
+            <>
+              <div className="pencil">
+                <LuPencilLine
+                  onClick={() => {
+                    setButtonState(false);
+                    setEditable(!editable);
+                  }}
+                  color="white"
+                />
+              </div>
+              <div className="trash">
+                <FaRegTrashCan color="white" />
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+        </div>
+        {editable ? (
+          <form onSubmit={editPost}>
+            <textarea
+              onKeyDown={(e) => {
+                console.log("e: ", e);
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  editPost();
+                }
+                if (e.key === "Escape") {
+                  e.preventDefault();
+                  setEditable(!editable);
+                }
+              }}
+              ref={inputElement}
+              type="text"
+              disabled={buttonState}
+              value={description}
+              onChange={(e) => setDescriptiont(e.target.value)}
+            />
+          </form>
+        ) : (
+          <p className="description">{post.description}</p>
+        )}
+
         <a href={post.url} target="_blank">
           {post.imageMetadata && (
             <img src={post.imageMetadata} alt="imagem do post" />
@@ -64,6 +158,17 @@ const Article = styled.article`
     width: 80%;
     height: fit-content;
     padding: 10px;
+    textarea:disabled {
+      background-color: #fff !important;
+    }
+    form {
+      width: 95%;
+    }
+    textarea {
+      width: 100%;
+      border-radius: 30px;
+      margin-left: 5px;
+    }
     a {
       text-decoration: none;
       width: 100%;
@@ -78,6 +183,16 @@ const Article = styled.article`
       margin: 0;
       margin-bottom: 10px;
       color: #c6c6c6;
+    }
+    .post-top {
+      display: flex;
+      width: 95%;
+      .trash {
+        padding-left: 10px;
+      }
+      .pencil {
+        padding-left: 60%;
+      }
     }
     .description {
       max-height: 50px;
