@@ -49,7 +49,6 @@ export default function DeletePost({
     }
   }
 
-  function afterOpenModal() {}
   function closeModal() {
     setIsOpen(false);
   }
@@ -61,7 +60,6 @@ export default function DeletePost({
       </div>
       <Modal
         isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}
       >

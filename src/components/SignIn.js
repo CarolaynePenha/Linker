@@ -31,10 +31,11 @@ export default function SignIn() {
       const { data } = await axios.post(URL, infosLogin);
       console.log("data: ", data);
       setToken(data.token);
-      setUser({ ...user, name: data.name, image: data.image });
+      setUser({ ...user, name: data.name, image: data.image, id: data.id });
       const stringifyUser = JSON.stringify({
         name: data.name,
         image: data.image,
+        id: data.id,
       });
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", stringifyUser);

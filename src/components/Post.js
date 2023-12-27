@@ -1,11 +1,12 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { FaRegHeart } from "react-icons/fa6";
 import { LuPencilLine } from "react-icons/lu";
+import { Tooltip } from "react-tooltip";
 
 import TokenContext from "../context/TokenContext";
-import DeletePost from "./Modal";
+import DeletePost from "./DeletePost";
+import LikePost from "./LikePost";
 
 export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
   const inputElement = useRef();
@@ -42,7 +43,7 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
       },
     };
     try {
-      const response = await axios.put(URL, { description }, config);
+      await axios.put(URL, { description }, config);
       setUpdatePosts(!updatePosts);
     } catch (err) {
       console.log(err.response);
@@ -53,10 +54,10 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
 
   return (
     <Article>
+      <Tooltip id="my-tooltip" />
       <div className="side-bar">
         <img src={post.image} alt="imagem do usuário" />
-        <FaRegHeart color="white" />
-        <p>{post.likes} likes</p>
+        <LikePost post={post} updatePosts={updatePosts} loading={loading} />
       </div>
       <div className="container">
         <div className="post-top">
