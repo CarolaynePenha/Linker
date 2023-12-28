@@ -7,6 +7,7 @@ import { UserProvider } from "../context/UserContext";
 import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import Timeline from "./Timeline";
+import User from "./User";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/" element={<SignIn />} />
               <Route path="/timeline" element={<Timeline />} />
+              <Route path="/user/:id" element={<User />} />
             </Routes>
           </BrowserRouter>
         </TokenProvider>

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
 import TokenContext from "../context/TokenContext";
 import { logOut } from "../utils";
+import SearchBar from "./SearchBar";
 
 export default function Header() {
   const { setToken } = useContext(TokenContext);
@@ -20,7 +21,12 @@ export default function Header() {
 
   return (
     <ConteinerHeader>
-      <p>
+      <SearchBar />
+      <p
+        onClick={() => {
+          navigate("/");
+        }}
+      >
         <strong>Linker </strong>
       </p>
       <DivMenu>

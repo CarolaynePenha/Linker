@@ -146,7 +146,7 @@ const DivTimeline = styled.div`
   align-items: center;
   justify-content: center;
   p {
-    margin-top: 12vh;
+    margin-top: 20vh;
   }
   strong {
     font-family: "Abril Fatface", serif;

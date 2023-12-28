@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { LuPencilLine } from "react-icons/lu";
 import { Tooltip } from "react-tooltip";
+import { useNavigate } from "react-router-dom";
 
 import TokenContext from "../context/TokenContext";
 import DeletePost from "./DeletePost";
@@ -14,6 +15,7 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
   const [buttonState, setButtonState] = useState(false);
   const [description, setDescriptiont] = useState(post.description);
   const { token } = useContext(TokenContext);
+  const navigate = useNavigate();
 
   const focusInput = () => {
     inputElement.current.focus();
@@ -51,7 +53,9 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
       alert("Houve um erro ao atualizar seu post!");
     }
   }
-
+  function userPage(id) {
+    navigate(`/user/${id}`);
+  }
   return (
     <Article>
       <Tooltip id="my-tooltip" />
@@ -61,7 +65,7 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
       </div>
       <div className="container">
         <div className="post-top">
-          <p>
+          <p onClick={() => userPage(post.postUserId)}>
             <strong>{post.name}</strong>
           </p>
           {post.postUserId === post.userId ? (
