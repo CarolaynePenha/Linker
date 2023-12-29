@@ -64,10 +64,11 @@ const ConteinerSrcBar = styled.div`
   position: fixed;
   z-index: 3;
   top: 10vh;
+  left: 5%;
   width: 90%;
   input {
     width: 100%;
-    height: 40px;
+    height: 45px;
     border-radius: ${(props) => (props.srcBar ? "0px" : "10px")};
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
@@ -83,7 +84,10 @@ const ConteinerSrcBar = styled.div`
       display: flex;
       p {
         margin: 10px;
-        margin-top: 15px;
+        margin-top: 17px;
+        color: #272330;
+        filter: none;
+        font-weight: 500;
       }
       img {
         width: 35px;
@@ -91,6 +95,32 @@ const ConteinerSrcBar = styled.div`
         border-radius: 30px;
         margin: 10px;
         margin-right: 0px;
+      }
+    }
+  }
+  @media (min-width: 800px) {
+    top: 2vh;
+    left: 20%;
+    width: 50%;
+    input {
+      height: 50px;
+      font-size: 16px;
+    }
+  }
+  @media (min-width: 1300px) {
+    input {
+      height: 55px;
+      font-size: 20px;
+    }
+    .src-box {
+      .src-results {
+        p {
+          font-size: 22px;
+        }
+        img {
+          width: 40px;
+          height: 40px;
+        }
       }
     }
   }

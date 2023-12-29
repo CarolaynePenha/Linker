@@ -33,7 +33,8 @@ export default function Header({ updatePosts, setUpdatePosts }) {
         {menuOpen ? (
           <>
             <div className="menuUp" onClick={() => setMenuOpen(!menuOpen)}>
-              <IoIosArrowUp size={30} color="white" />
+              {" "}
+              <IoIosArrowUp className="arrow-up" size={30} color="white" />
               <img src={image} alt="userImage" />
             </div>
             <div className="logout">
@@ -42,7 +43,7 @@ export default function Header({ updatePosts, setUpdatePosts }) {
           </>
         ) : (
           <div className="menuUp" onClick={() => setMenuOpen(!menuOpen)}>
-            <IoIosArrowDown size={30} color="white" />
+            <IoIosArrowDown className="arrow-down" size={30} color="white" />
             <img src={image} alt="userImage" />
           </div>
         )}
@@ -75,6 +76,11 @@ const ConteinerHeader = styled.div`
     font-size: 30px;
     font-family: "Abril Fatface", serif;
   }
+  @media (min-width: 1300px) {
+    strong {
+      font-size: 35px;
+    }
+  }
 `;
 const DivMenu = styled.div`
   position: fixed;
@@ -92,6 +98,12 @@ const DivMenu = styled.div`
   .menuUp {
     padding-bottom: 15px;
     padding-right: 10px;
+    .arrow-up {
+      margin-bottom: 10px;
+    }
+    .arrow-down {
+      margin-bottom: 10px;
+    }
   }
   .logout {
     padding-right: 10px;
@@ -101,5 +113,18 @@ const DivMenu = styled.div`
     height: 50px;
     border-radius: 30px;
     margin-left: 5px;
+  }
+  @media (min-width: 800px) {
+    .logout {
+      padding: 15px;
+    }
+  }
+  @media (min-width: 1300px) {
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 30px;
+      margin-left: 8px;
+    }
   }
 `;

@@ -9,6 +9,7 @@ import { logOut } from "../utils";
 import UserContext from "../context/UserContext";
 
 import Post from "./Post";
+import Trending from "./Trending";
 
 export default function Timeline() {
   const [buttonState, setButtonState] = useState(false);
@@ -23,7 +24,7 @@ export default function Timeline() {
   const navigate = useNavigate();
   const [updatePosts, setUpdatePosts] = useState(false);
   const [loading, setLoading] = useState();
-
+  const [trendings, setTrendings] = useState(false);
   const { url, description } = infoPost;
 
   async function post(event) {
@@ -56,9 +57,31 @@ export default function Timeline() {
 
   useEffect(() => {
     if (token) {
+      async function getHashtagsTrending() {
+        const URL = process.env.REACT_APP_API_URL + "/trending";
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        try {
+          const { data } = await axios.get(URL, config);
+          console.log("dataGettrending: ", data);
+          setTrendings(data);
+        } catch (err) {
+          console.log(err.response);
+        }
+      }
+      getHashtagsTrending();
+    } else {
+      logOut(setToken, setUser, navigate);
+    }
+  }, [token, updatePosts]);
+
+  useEffect(() => {
+    if (token) {
       async function getPosts() {
         setLoading(true);
-
         const URL = process.env.REACT_APP_API_URL + "/timeline";
         const config = {
           headers: {
@@ -81,7 +104,7 @@ export default function Timeline() {
   }, [token, updatePosts]);
 
   return (
-    <>
+    <DivConteiner>
       <Header />
       <DivTimeline>
         <p>
@@ -135,7 +158,18 @@ export default function Timeline() {
         {posts?.length === 0 && <p>Não há nenhum post ainda.</p>}
         {!posts && <p>Carregando...</p>}
       </DivTimeline>
-    </>
+      <DivTrending>
+        <p className="top-trending">
+          <strong>Trending</strong>
+        </p>
+        {trendings[0] &&
+          trendings.map((trending, index) => {
+            return <Trending key={index} trending={trending} />;
+          })}
+        {trendings?.length === 0 && <p>Não há nenhuma hashtag ainda.</p>}
+        {!trendings && <p>Carregando...</p>}
+      </DivTrending>
+    </DivConteiner>
   );
 }
 //  ----------------------------css
@@ -144,7 +178,7 @@ const DivTimeline = styled.div`
   height: fit-content;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   p {
     margin-top: 20vh;
@@ -196,5 +230,60 @@ const DivTimeline = styled.div`
         color: #544f5e;
       }
     }
+  }
+  @media (min-width: 800px) {
+    width: 50%;
+    margin-left: 10%;
+  }
+  @media (min-width: 1300px) {
+    width: 35%;
+    margin-left: 15%;
+  }
+`;
+const DivConteiner = styled.div`
+  width: 100%;
+  @media (min-width: 800px) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+`;
+const DivTrending = styled.div`
+  width: 25%;
+  height: fit-content;
+  background-color: #272330;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 10px;
+  position: absolute;
+  display: none;
+  .top-trending {
+    margin-bottom: 10px;
+  }
+  p {
+    font-size: 20px;
+    font-weight: 400;
+    color: white;
+    padding-bottom: 5px;
+    strong {
+      font-family: "Abril Fatface", serif;
+      text-decoration: underline;
+      font-size: 24px;
+      font-weight: 500;
+    }
+  }
+  @media (min-width: 800px) {
+    display: flex;
+    flex-direction: column;
+    top: 26vh;
+    right: 13%;
+    border-radius: 20px;
+  }
+  @media (min-width: 1300px) {
+    display: flex;
+    width: 22%;
+    top: 26vh;
+    right: 26%;
+    border-radius: 20px;
   }
 `;
