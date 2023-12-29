@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { DebounceInput } from "react-debounce-input";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import TokenContext from "../context/TokenContext";
-import axios from "axios";
 
-export default function SearchBar() {
+export default function SearchBar({ updatePosts, setUpdatePosts }) {
   const [srcBar, setSrcBar] = useState("");
   const [names, setnames] = useState();
   const { token } = useContext(TokenContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function search() {
@@ -20,7 +22,6 @@ export default function SearchBar() {
       };
       try {
         const { data } = await axios.get(URL, config);
-        console.log("data: ", data);
         setnames(data);
       } catch (err) {
         console.log(err.response);
@@ -29,10 +30,14 @@ export default function SearchBar() {
     }
     search();
   }, [srcBar]);
-  console.log("names: ", names);
+
+  function userPage(id) {
+    navigate(`/user/${id}`);
+    setUpdatePosts(!updatePosts);
+  }
 
   return (
-    <ConteinerSrcBar>
+    <ConteinerSrcBar srcBar={srcBar}>
       <DebounceInput
         minLength={3}
         debounceTimeout={500}
@@ -43,7 +48,7 @@ export default function SearchBar() {
         <div className="src-box">
           {names.map((name) => {
             return (
-              <div className="src-results">
+              <div onClick={() => userPage(name.id)} className="src-results">
                 <img src={name.image} />
                 <p>{name.name}</p>
               </div>
@@ -63,6 +68,7 @@ const ConteinerSrcBar = styled.div`
   input {
     width: 100%;
     height: 40px;
+    border-radius: ${(props) => (props.srcBar ? "0px" : "10px")};
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     border: none;

@@ -8,6 +8,7 @@ import SignUp from "./SignUp";
 import SignIn from "./SignIn";
 import Timeline from "./Timeline";
 import User from "./User";
+import Hashtag from "./Hashtag";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               <Route path="/" element={<SignIn />} />
               <Route path="/timeline" element={<Timeline />} />
               <Route path="/user/:id" element={<User />} />
+              <Route path="/hashtag/:hashtag" element={<Hashtag />} />
             </Routes>
           </BrowserRouter>
         </TokenProvider>

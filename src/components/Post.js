@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import TokenContext from "../context/TokenContext";
 import DeletePost from "./DeletePost";
 import LikePost from "./LikePost";
+import ReactHashtag from "@mdnm/react-hashtag";
 
 export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
   const inputElement = useRef();
@@ -55,6 +56,10 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
   }
   function userPage(id) {
     navigate(`/user/${id}`);
+  }
+  function goToHashtagPage(tag) {
+    const hashtag = tag.slice(1);
+    navigate(`/hashtag/${hashtag}`);
   }
   return (
     <Article>
@@ -111,7 +116,11 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
             />
           </form>
         ) : (
-          <p className="description">{post.description}</p>
+          <p>
+            <ReactHashtag onHashtagClick={(val) => goToHashtagPage(val)}>
+              {post.description || ""}
+            </ReactHashtag>
+          </p>
         )}
         <a href={post.url} target="_blank">
           {post.imageMetadata && (
@@ -136,6 +145,9 @@ const Article = styled.article`
   background-color: #272330;
   width: 100%;
   margin-bottom: 20px;
+  span {
+    color: tomato;
+  }
   .side-bar {
     padding: 10px;
     width: 20%;
@@ -177,6 +189,7 @@ const Article = styled.article`
     a {
       text-decoration: none;
       width: 100%;
+      margin-top: 10px;
     }
     strong {
       font-size: 20px;
@@ -221,3 +234,6 @@ const Article = styled.article`
     }
   }
 `;
+// const Hashtag = styled.span`
+//   color: tomato;
+// `;

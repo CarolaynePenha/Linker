@@ -37,10 +37,10 @@ export default function Timeline() {
       },
     };
     try {
-      if (infoPost.description.length > 0) {
-        const response = await axios.post(URL, infoPost, config);
+      if (infoPost.description?.length > 0) {
+        await axios.post(URL, infoPost, config);
       } else {
-        const response = await axios.post(URL, { url }, config);
+        await axios.post(URL, { url }, config);
       }
       setButtonState(false);
       setButtonLoading("Publicar");
@@ -109,6 +109,7 @@ export default function Timeline() {
                 setInfoPost({ ...infoPost, description: e.target.value })
               }
             />
+
             <button
               disabled={buttonState}
               type="submit"
@@ -131,7 +132,7 @@ export default function Timeline() {
               />
             );
           })}
-        {posts.length === 0 && <p>Não há nenhum post ainda.</p>}
+        {posts?.length === 0 && <p>Não há nenhum post ainda.</p>}
         {!posts && <p>Carregando...</p>}
       </DivTimeline>
     </>

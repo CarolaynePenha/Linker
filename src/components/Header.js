@@ -9,7 +9,7 @@ import TokenContext from "../context/TokenContext";
 import { logOut } from "../utils";
 import SearchBar from "./SearchBar";
 
-export default function Header() {
+export default function Header({ updatePosts, setUpdatePosts }) {
   const { setToken } = useContext(TokenContext);
   const { setUser } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,7 +21,7 @@ export default function Header() {
 
   return (
     <ConteinerHeader>
-      <SearchBar />
+      <SearchBar updatePosts={updatePosts} setUpdatePosts={setUpdatePosts} />
       <p
         onClick={() => {
           navigate("/");
@@ -87,7 +87,7 @@ const DivMenu = styled.div`
   align-items: center;
   background-color: #272330;
   border-bottom-left-radius: 40px;
-  z-index: 2;
+  z-index: 4;
 
   .menuUp {
     padding-bottom: 15px;
