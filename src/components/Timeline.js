@@ -89,10 +89,10 @@ export default function Timeline() {
           },
         };
         try {
-          const { data } = await axios.get(URL, config);
-          console.log("dataGet: ", data);
+          const response = await axios.get(URL, config);
+          console.log("response: ", response.data);
+          setPosts(response.data);
           setLoading(false);
-          setPosts(data);
         } catch (err) {
           console.log(err.response);
         }
@@ -142,7 +142,8 @@ export default function Timeline() {
             </button>
           </form>
         </section>
-        {posts[0] &&
+        {posts?.length >= 1 &&
+          !loading &&
           posts.map((post, index) => {
             return (
               <Post
@@ -150,7 +151,6 @@ export default function Timeline() {
                 post={post}
                 updatePosts={updatePosts}
                 setUpdatePosts={setUpdatePosts}
-                setPosts={setPosts}
                 loading={loading}
               />
             );
@@ -182,6 +182,7 @@ const DivTimeline = styled.div`
   justify-content: center;
   p {
     margin-top: 20vh;
+    font-size: 16px;
   }
   strong {
     font-family: "Abril Fatface", serif;
@@ -244,8 +245,8 @@ const DivConteiner = styled.div`
   width: 100%;
   @media (min-width: 800px) {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
   }
 `;
 const DivTrending = styled.div`
@@ -254,9 +255,10 @@ const DivTrending = styled.div`
   background-color: #272330;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 10px;
-  position: absolute;
+  padding: 15px;
   display: none;
+  margin-top: 26vh;
+  margin-left: 10px;
   .top-trending {
     margin-bottom: 10px;
   }
@@ -276,7 +278,7 @@ const DivTrending = styled.div`
     display: flex;
     flex-direction: column;
     top: 26vh;
-    right: 13%;
+    right: 3%;
     border-radius: 20px;
   }
   @media (min-width: 1300px) {

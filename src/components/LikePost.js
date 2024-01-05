@@ -28,18 +28,14 @@ export default function LikePost({ post, updatePosts, loading }) {
     } else if (!isLiked && post.likes >= 2) {
       const likes = post.likes - 1;
       setOtherLikes(likes);
-      console.log("entrei no 2");
-      console.log("PostId", post.id);
     }
   }, [token, updatePosts, loading]);
 
   async function postLike() {
     if (liked) {
       setLikesNumber(likesNumber - 1);
-      console.log("likesNumber: ", likesNumber);
     } else {
       setLikesNumber(likesNumber + 1);
-      console.log("likesNumber: ", likesNumber);
     }
     const { id } = post;
     const URL = process.env.REACT_APP_API_URL + `/timeline/like/${id}`;
@@ -61,7 +57,7 @@ export default function LikePost({ post, updatePosts, loading }) {
       {likesNumber === 0 ? (
         <>
           <FaRegHeart onClick={postLike} color="white" />
-          <p>{likesNumber}likes</p>
+          <p>{likesNumber} likes</p>
         </>
       ) : liked ? (
         <>
@@ -72,7 +68,7 @@ export default function LikePost({ post, updatePosts, loading }) {
               otherLikesName?.name ? `, ${otherLikesName.name}` : ""
             } ${otherLikes >= 1 ? `e outras ${otherLikes} pessoas` : ""}`}
           >
-            {likesNumber}likes
+            {likesNumber} likes
           </p>
         </>
       ) : (
