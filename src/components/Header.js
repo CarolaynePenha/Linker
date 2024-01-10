@@ -33,7 +33,6 @@ export default function Header({ updatePosts, setUpdatePosts }) {
         {menuOpen ? (
           <>
             <div className="menuUp" onClick={() => setMenuOpen(!menuOpen)}>
-              {" "}
               <IoIosArrowUp className="arrow-up" size={30} color="white" />
               <img src={image} alt="userImage" />
             </div>
@@ -121,9 +120,8 @@ const DivMenu = styled.div`
   }
   @media (min-width: 1300px) {
     img {
-      width: 60px;
-      height: 60px;
-      border-radius: 30px;
+      width: 55;
+      height: 55px;
       margin-left: 8px;
     }
   }

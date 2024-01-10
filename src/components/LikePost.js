@@ -8,6 +8,7 @@ import axios from "axios";
 
 export default function LikePost({ post, updatePosts, loading }) {
   const { user } = useContext(UserContext);
+  console.log("user: ", user);
   const { token } = useContext(TokenContext);
   const [liked, setLiked] = useState(false);
   const [likesNumber, setLikesNumber] = useState(0);
@@ -16,8 +17,8 @@ export default function LikePost({ post, updatePosts, loading }) {
 
   useEffect(() => {
     const likeName = post.likedBy.find((item) => item.userId !== user.id);
-    setOtherLikesName(likeName);
     const isLiked = post.likedBy.find((item) => item.userId === user.id);
+    setOtherLikesName(likeName);
     setLikesNumber(Number(post.likes));
     if (isLiked) {
       setLiked(true);
@@ -29,7 +30,7 @@ export default function LikePost({ post, updatePosts, loading }) {
       const likes = post.likes - 1;
       setOtherLikes(likes);
     }
-  }, [token, updatePosts, loading]);
+  }, [token, updatePosts, loading, post.likedBy, post.likes, user.id]);
 
   async function postLike() {
     if (liked) {

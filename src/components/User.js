@@ -9,13 +9,16 @@ import TokenContext from "../context/TokenContext";
 import UserContext from "../context/UserContext";
 import Post from "./Post";
 import LoadingRing from "./LoadingRing";
+import Follow from "./Follow";
 
 export default function User() {
   const { token, setToken } = useContext(TokenContext);
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [posts, setPosts] = useState(false);
   const navigate = useNavigate();
   const [updatePosts, setUpdatePosts] = useState(false);
+  const [followers, setFollowers] = useState();
+
   const [loading, setLoading] = useState();
   const { id } = useParams();
   useEffect(() => {
@@ -36,6 +39,21 @@ export default function User() {
           console.log(err.response);
         }
       }
+      async function getFollowers() {
+        const URL = process.env.REACT_APP_API_URL + `/follow/${id}`;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        try {
+          const { data } = await axios.get(URL, config);
+          setFollowers(data.following);
+        } catch (err) {
+          console.log(err.response);
+        }
+      }
+      getFollowers();
       getPosts();
     } else {
       logOut(setToken, setUser, navigate);
@@ -47,12 +65,24 @@ export default function User() {
       <Header updatePosts={updatePosts} setUpdatePosts={setUpdatePosts} />
       <DivUserPage>
         <div className="top-user-posts">
-          <img src={posts[0]?.image} alt="imagem do usuário" />
-          <p>
-            <strong>{posts[0]?.name} posts</strong>
-          </p>
+          <div className="user-infos">
+            <img src={posts[0]?.image} alt="imagem do usuário" />
+
+            {id == user.id ? (
+              <p>
+                <strong>Meus posts</strong>
+              </p>
+            ) : (
+              <p>
+                <strong>{posts[0]?.name} posts</strong>
+              </p>
+            )}
+          </div>
+          {id == user.id ? "" : <Follow followers={followers} id={id} />}
         </div>
-        {posts[0] &&
+
+        {posts?.length >= 1 &&
+          !loading &&
           posts.map((post, index) => {
             return (
               <Post
@@ -96,18 +126,18 @@ const DivUserPage = styled.div`
     margin-bottom: 15px;
   }
   .top-user-posts {
+    width: 100%;
     margin-top: 20vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    img {
-      display: none;
-      /* width: 50px;
-      height: 50px;
-      border-radius: 30px;
-      margin-left: 5px;
-      margin-right: 10px;
-      margin-bottom: 10px; */
+    justify-content: space-between;
+
+    .user-infos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        display: none;
+      }
     }
   }
 `;

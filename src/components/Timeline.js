@@ -10,10 +10,12 @@ import UserContext from "../context/UserContext";
 
 import Post from "./Post";
 import Trending from "./Trending";
+import LoadingRing from "./LoadingRing";
 
 export default function Timeline() {
   const [buttonState, setButtonState] = useState(false);
   const [buttonLoading, setButtonLoading] = useState("Publicar");
+  const [followers, setFollowers] = useState("Publicar");
   const { token, setToken } = useContext(TokenContext);
   const { setUser } = useContext(UserContext);
   const [posts, setPosts] = useState(false);
@@ -66,12 +68,26 @@ export default function Timeline() {
         };
         try {
           const { data } = await axios.get(URL, config);
-          console.log("dataGettrending: ", data);
           setTrendings(data);
         } catch (err) {
           console.log(err.response);
         }
       }
+      async function getFollowers() {
+        const URL = process.env.REACT_APP_API_URL + "/follow";
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        try {
+          const { data } = await axios.get(URL, config);
+          setFollowers(data);
+        } catch (err) {
+          console.log(err.response);
+        }
+      }
+      getFollowers();
       getHashtagsTrending();
     } else {
       logOut(setToken, setUser, navigate);
@@ -90,7 +106,7 @@ export default function Timeline() {
         };
         try {
           const response = await axios.get(URL, config);
-          console.log("response: ", response.data);
+
           setPosts(response.data);
           setLoading(false);
         } catch (err) {
@@ -105,7 +121,7 @@ export default function Timeline() {
 
   return (
     <DivConteiner>
-      <Header />
+      <Header updatePosts={updatePosts} setUpdatePosts={setUpdatePosts} />
       <DivTimeline>
         <p>
           <strong>Timeline</strong>
@@ -142,21 +158,38 @@ export default function Timeline() {
             </button>
           </form>
         </section>
-        {posts?.length >= 1 &&
-          !loading &&
+        {posts && typeof posts === "string" ? (
+          posts === "Still don't follow anyone" ? (
+            <DivNoPosts>
+              <p>Você ainda não segue ninguém, procure por amigos.</p>
+            </DivNoPosts>
+          ) : (
+            <DivNoPosts>
+              <p>Nenhum post ,dos seus amigos, encontrado. </p>
+            </DivNoPosts>
+          )
+        ) : posts?.length >= 1 && !loading ? (
           posts.map((post, index) => {
             return (
               <Post
                 key={index}
                 post={post}
+                followers={followers}
                 updatePosts={updatePosts}
                 setUpdatePosts={setUpdatePosts}
                 loading={loading}
               />
             );
-          })}
-        {posts?.length === 0 && <p>Não há nenhum post ainda.</p>}
-        {!posts && <p>Carregando...</p>}
+          })
+        ) : (
+          !posts && (
+            <DivNoPosts>
+              <p>
+                <LoadingRing />
+              </p>
+            </DivNoPosts>
+          )
+        )}
       </DivTimeline>
       <DivTrending>
         <p className="top-trending">
@@ -288,4 +321,11 @@ const DivTrending = styled.div`
     right: 26%;
     border-radius: 20px;
   }
+`;
+const DivNoPosts = styled.div`
+  height: 20vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

@@ -14,21 +14,26 @@ import ReactHashtag from "@mdnm/react-hashtag";
 import Comments from "./Commets";
 import UserContext from "../context/UserContext";
 
-export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
+export default function Post({
+  post,
+  updatePosts,
+  setUpdatePosts,
+  loading,
+  followers,
+}) {
   const inputElement = useRef();
   const [editable, setEditable] = useState(false);
   const [buttonState, setButtonState] = useState(false);
   const [description, setDescriptiont] = useState(post.description);
   const { token } = useContext(TokenContext);
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [displayComments, setDisplayComments] = useState(false);
   const [commentText, setCommentText] = useState("");
-  const { user } = useContext(UserContext);
 
   const focusInput = () => {
     inputElement.current.focus();
   };
-
   useEffect(() => {
     if (editable) {
       focusInput();
@@ -106,7 +111,7 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
           <img src={post.image} alt="imagem do usuário" />
           <LikePost post={post} updatePosts={updatePosts} loading={loading} />
           <AiOutlineComment onClick={showComments} color="white" size={20} />
-          <p>{comments.length}</p>
+          <p>{comments?.length}</p>
         </div>
         <div className="container">
           <div className="post-top">
@@ -176,9 +181,20 @@ export default function Post({ post, updatePosts, setUpdatePosts, loading }) {
         </div>
       </div>
       <DivComments displayComments={displayComments}>
-        {comments[0] &&
+        {comments?.[0] &&
           comments.map((comment, index) => {
-            return <Comments key={index} comment={comment} />;
+            const following = followers?.filter(
+              (follower) => follower.followedId === comment.userId
+            );
+
+            return (
+              <Comments
+                key={index}
+                comment={comment}
+                following={following}
+                postUserId={post.postUserId}
+              />
+            );
           })}
         {comments?.length === 0 && <Comments comment={false} />}
 
@@ -318,6 +334,11 @@ const DivComments = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   background-color: #544f5e;
+  small {
+    color: #95b0b5;
+    font-size: 17px;
+    margin-left: 10px;
+  }
 
   img {
     width: 45px;
