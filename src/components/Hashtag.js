@@ -55,7 +55,8 @@ export default function Hashtag() {
             <strong># {hashtag} </strong>
           </p>
         </div>
-        {posts[0] &&
+        {posts?.length >= 1 &&
+          !loading &&
           posts.map((post, index) => {
             return (
               <Post

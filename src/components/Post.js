@@ -6,6 +6,7 @@ import { Tooltip } from "react-tooltip";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineComment } from "react-icons/ai";
 import { TbSend } from "react-icons/tb";
+import { IoIosShareAlt } from "react-icons/io";
 
 import TokenContext from "../context/TokenContext";
 import DeletePost from "./DeletePost";
@@ -13,6 +14,7 @@ import LikePost from "./LikePost";
 import ReactHashtag from "@mdnm/react-hashtag";
 import Comments from "./Commets";
 import UserContext from "../context/UserContext";
+import Share from "./Share";
 
 export default function Post({
   post,
@@ -24,7 +26,7 @@ export default function Post({
   const inputElement = useRef();
   const [editable, setEditable] = useState(false);
   const [buttonState, setButtonState] = useState(false);
-  const [description, setDescriptiont] = useState(post.description);
+  const [description, setDescription] = useState();
   const { token } = useContext(TokenContext);
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
@@ -38,12 +40,13 @@ export default function Post({
     if (editable) {
       focusInput();
     }
+    setDescription(post.description);
   }, [editable]);
 
   useEffect(() => {
     if (!loading) {
       setEditable(false);
-      setDescriptiont("");
+      setDescription("");
     }
   }, [loading]);
 
@@ -105,6 +108,16 @@ export default function Post({
 
   return (
     <Article>
+      {post.rePostId && (
+        <div className="re-posted">
+          <IoIosShareAlt size={25} color="white" />{" "}
+          {post.rePostUserId === user.id ? (
+            <p> Repostado por Você</p>
+          ) : (
+            <p> Repostado por {post.rePostName}</p>
+          )}
+        </div>
+      )}
       <div className="post-infos">
         <Tooltip id="my-tooltip" />
         <div className="side-bar">
@@ -112,6 +125,12 @@ export default function Post({
           <LikePost post={post} updatePosts={updatePosts} loading={loading} />
           <AiOutlineComment onClick={showComments} color="white" size={20} />
           <p>{comments?.length}</p>
+          <Share
+            post={post}
+            updatePosts={updatePosts}
+            setUpdatePosts={setUpdatePosts}
+            loading={loading}
+          />
         </div>
         <div className="container">
           <div className="post-top">
@@ -157,7 +176,7 @@ export default function Post({
                 type="text"
                 disabled={buttonState}
                 value={description}
-                onChange={(e) => setDescriptiont(e.target.value)}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </form>
           ) : (
@@ -229,6 +248,18 @@ const Article = styled.article`
   background-color: #272330;
   width: 100%;
   margin-bottom: 20px;
+  .re-posted {
+    display: flex;
+    height: fit-content;
+    padding: 10px;
+    background-color: #191919;
+    p {
+      margin: 0;
+      padding-left: 15px;
+      font-size: 18px;
+      color: white;
+    }
+  }
 
   .post-infos {
     display: flex;
@@ -255,6 +286,7 @@ const Article = styled.article`
       p {
         margin: 0;
         margin: 10px 0px;
+        padding-bottom: 10px;
         color: white;
       }
     }
@@ -273,8 +305,9 @@ const Article = styled.article`
       }
       textarea {
         width: 100%;
-        border-radius: 30px;
+        border-radius: 20px;
         margin-left: 5px;
+        padding: 10px;
       }
       a {
         text-decoration: none;

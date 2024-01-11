@@ -4,9 +4,7 @@ import { FaCheck } from "react-icons/fa6";
 import { GoDotFill } from "react-icons/go";
 
 export default function Comments({ comment, following, postUserId }) {
-  console.log("following: ", following);
   const { user } = useContext(UserContext);
-
   return (
     <>
       {comment && (

@@ -8,7 +8,6 @@ import axios from "axios";
 
 export default function LikePost({ post, updatePosts, loading }) {
   const { user } = useContext(UserContext);
-  console.log("user: ", user);
   const { token } = useContext(TokenContext);
   const [liked, setLiked] = useState(false);
   const [likesNumber, setLikesNumber] = useState(0);

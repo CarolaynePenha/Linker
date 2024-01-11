@@ -106,7 +106,6 @@ export default function Timeline() {
         };
         try {
           const response = await axios.get(URL, config);
-
           setPosts(response.data);
           setLoading(false);
         } catch (err) {

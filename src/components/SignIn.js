@@ -29,7 +29,6 @@ export default function SignIn() {
     const URL = process.env.REACT_APP_API_URL + "/signIn";
     try {
       const { data } = await axios.post(URL, infosLogin);
-      console.log("data: ", data);
       setToken(data.token);
       setUser({ ...user, name: data.name, image: data.image, id: data.id });
       const stringifyUser = JSON.stringify({
