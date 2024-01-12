@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useState, useEffect } from "react";
+import useInterval from "use-interval";
 
 import Header from "./Header";
 import TokenContext from "../context/TokenContext";
@@ -19,6 +20,7 @@ export default function Timeline() {
   const { token, setToken } = useContext(TokenContext);
   const { setUser } = useContext(UserContext);
   const [posts, setPosts] = useState(false);
+  const [newPostsCount, setNewPostsCount] = useState(0);
   const [infoPost, setInfoPost] = useState({
     url: "",
     description: "",
@@ -29,6 +31,33 @@ export default function Timeline() {
   const [trendings, setTrendings] = useState(false);
   const { url, description } = infoPost;
 
+  useInterval(() => {
+    getNewPostsCount();
+  }, 15000);
+
+  async function getNewPostsCount() {
+    const firstPost = posts.find((post) => !post.rePostId);
+    const postId = firstPost.id;
+    console.log("postId: ", postId);
+    const repost = posts.find((post) => post.rePostId);
+    const rePostId = repost.rePostId;
+    console.log("rePostId: ", rePostId);
+    const URL =
+      process.env.REACT_APP_API_URL +
+      `/timeline/newposts/?postId=${postId}&rePostId=${rePostId}`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const { data } = await axios.get(URL, config);
+      setNewPostsCount(data);
+    } catch (err) {
+      console.log(err.response);
+      alert("Houve um erro ao verificar a existencia de novos posts!");
+    }
+  }
   async function post(event) {
     event.preventDefault();
     setButtonState(true);
@@ -121,7 +150,7 @@ export default function Timeline() {
   return (
     <DivConteiner>
       <Header updatePosts={updatePosts} setUpdatePosts={setUpdatePosts} />
-      <DivTimeline>
+      <DivTimeline newPostsCount={newPostsCount.count}>
         <p>
           <strong>Timeline</strong>
         </p>
@@ -157,6 +186,17 @@ export default function Timeline() {
             </button>
           </form>
         </section>
+        <div className="new-posts">
+          <button
+            onClick={() => {
+              setNewPostsCount(0);
+              setUpdatePosts(!updatePosts);
+            }}
+          >
+            Ver {newPostsCount.count} novos posts.
+          </button>
+        </div>
+
         {posts && typeof posts === "string" ? (
           posts === "Still don't follow anyone" ? (
             <DivNoPosts>
@@ -262,6 +302,22 @@ const DivTimeline = styled.div`
         font-style: italic;
         color: #544f5e;
       }
+    }
+  }
+  .new-posts {
+    display: ${(props) => (props.newPostsCount >= 1 ? "block" : "none")};
+    height: fit-content;
+    width: 80%;
+    margin: 20px auto;
+    button {
+      width: 100%;
+      height: 50px;
+      border-radius: 10px;
+      border: none;
+      background-color: #5f3e56;
+      margin: 10px 0px;
+      color: white;
+      font-size: 16px;
     }
   }
   @media (min-width: 800px) {
