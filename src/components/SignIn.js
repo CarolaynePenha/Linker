@@ -50,7 +50,7 @@ export default function SignIn() {
 
   const { email, password } = infosLogin;
   return (
-    <>
+    <DivSignIn>
       <CompleteHeader />
       <SignInContent>
         <Conteiner>
@@ -89,11 +89,18 @@ export default function SignIn() {
           </Link>
         </Conteiner>
       </SignInContent>
-    </>
+    </DivSignIn>
   );
 }
 
 // --------------------------------------------------------------css
+
+const DivSignIn = styled.div`
+  @media (min-width: 800px) {
+    width: 100%;
+    display: flex;
+  }
+`;
 const SignInContent = styled.div`
   width: 100%;
   height: fit-content;
@@ -101,8 +108,10 @@ const SignInContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (min-width: 800px) {
+    width: 40%;
+  }
 `;
-
 const Conteiner = styled.div`
   width: 100%;
   height: fit-content;
@@ -110,6 +119,9 @@ const Conteiner = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (min-width: 800px) {
+    height: 100vh;
+  }
 `;
 
 export const ButtonRegisterLogin = styled.button`
@@ -125,12 +137,12 @@ export const ButtonRegisterLogin = styled.button`
   }
   @media (min-width: 600px) {
     p {
-      font-size: 22px;
+      font-size: 18px;
     }
   }
   @media (min-width: 1500px) {
     p {
-      font-size: 24px;
+      font-size: 20px;
     }
   }
 `;
@@ -162,22 +174,33 @@ export const Form = styled.form`
   }
   @media (min-width: 600px) {
     input {
-      height: 70px;
-      font-size: 22px;
+      height: 50px;
+      font-size: 20px;
     }
     .save-button {
-      height: 70px;
-      font-size: 22px;
+      height: 50px;
+      font-size: 20px;
     }
   }
-  @media (min-width: 1500px) {
+  @media (min-width: 1300px) {
     input {
-      height: 85px;
-      font-size: 26px;
+      height: 60px;
+      font-size: 20px;
     }
     .save-button {
-      height: 85px;
-      font-size: 26px;
+      height: 60px;
+      font-size: 20px;
+    }
+  }
+
+  @media (min-width: 1700px) {
+    input {
+      height: 65px;
+      font-size: 22px;
+    }
+    .save-button {
+      height: 65px;
+      font-size: 22px;
     }
   }
 `;

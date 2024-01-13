@@ -38,7 +38,11 @@ const DivApp = styled.div`
   height: fit-content;
   position: relative;
   min-height: 100vh;
-  @media (min-width: 600px) {
+  /* @media (min-width: 600px) {
+    display: flex;
+    justify-content: center;
+  } */
+  @media (min-width: 800px) {
     display: flex;
     justify-content: center;
   }

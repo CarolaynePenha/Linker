@@ -75,6 +75,7 @@ const ConteinerHeader = styled.div`
     font-size: 30px;
     font-family: "Abril Fatface", serif;
   }
+
   @media (min-width: 1300px) {
     strong {
       font-size: 35px;

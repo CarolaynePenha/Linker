@@ -19,8 +19,8 @@ import Share from "./Share";
 export default function Post({
   post,
   updatePosts,
-  setUpdatePosts,
   loading,
+  setUpdatePosts,
   followers,
 }) {
   const inputElement = useRef();
@@ -42,7 +42,6 @@ export default function Post({
     }
     setDescription(post.description);
   }, [editable]);
-
   useEffect(() => {
     if (!loading) {
       setEditable(false);
@@ -118,13 +117,16 @@ export default function Post({
           )}
         </div>
       )}
+
       <div className="post-infos">
         <Tooltip id="my-tooltip" />
         <div className="side-bar">
           <img src={post.image} alt="imagem do usuário" />
           <LikePost post={post} updatePosts={updatePosts} loading={loading} />
-          <AiOutlineComment onClick={showComments} color="white" size={20} />
-          <p>{comments?.length}</p>
+          <div className="comment-icon">
+            <AiOutlineComment onClick={showComments} color="white" size={30} />
+            <p>{comments?.length}</p>
+          </div>
           <Share
             post={post}
             updatePosts={updatePosts}
@@ -248,11 +250,18 @@ const Article = styled.article`
   background-color: #272330;
   width: 100%;
   margin-bottom: 20px;
+  @media (min-width: 800px) {
+    border-radius: 20px;
+  }
   .re-posted {
     display: flex;
     height: fit-content;
     padding: 10px;
     background-color: #191919;
+    @media (min-width: 800px) {
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+    }
     p {
       margin: 0;
       padding-left: 15px;
@@ -266,6 +275,9 @@ const Article = styled.article`
     justify-content: space-between;
     background-color: #272330;
     width: 100%;
+    @media (min-width: 800px) {
+      border-radius: 20px;
+    }
     span {
       color: tomato;
     }
@@ -274,7 +286,7 @@ const Article = styled.article`
       width: 20%;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
       img {
         width: 50px;
@@ -282,12 +294,33 @@ const Article = styled.article`
         border-radius: 30px;
         margin-left: 5px;
         margin-bottom: 10px;
+        @media (min-width: 800px) {
+          width: 60px;
+          height: 60px;
+        }
       }
+      .comment-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .like-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
       p {
         margin: 0;
         margin: 10px 0px;
         padding-bottom: 10px;
         color: white;
+        @media (min-width: 800px) {
+          font-size: 18px;
+        }
+        @media (min-width: 1300px) {
+          font-size: 20px;
+        }
       }
     }
     .container {

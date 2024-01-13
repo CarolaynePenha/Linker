@@ -53,22 +53,22 @@ export default function LikePost({ post, updatePosts, loading }) {
   }
 
   return (
-    <>
+    <div className="like-icon">
       {likesNumber === 0 ? (
         <>
-          <FaRegHeart onClick={postLike} color="white" />
+          <FaRegHeart onClick={postLike} size={30} color="#ffffff" />
           <p>{likesNumber} likes</p>
         </>
       ) : liked ? (
         <>
-          <IoMdHeart onClick={postLike} color="red" />
+          <IoMdHeart onClick={postLike} color="red" size={30} />
           <p
             data-tooltip-id="my-tooltip"
             data-tooltip-content={`Você${
               otherLikesName?.name ? `, ${otherLikesName.name}` : ""
             } ${otherLikes >= 1 ? `e outras ${otherLikes} pessoas` : ""}`}
           >
-            {likesNumber} likes
+            {likesNumber}
           </p>
         </>
       ) : (
@@ -81,10 +81,10 @@ export default function LikePost({ post, updatePosts, loading }) {
               otherLikes >= 1 ? `e outras ${otherLikes} pessoas` : ""
             }`}
           >
-            {likesNumber}likes
+            {likesNumber}
           </p>
         </>
       )}
-    </>
+    </div>
   );
 }

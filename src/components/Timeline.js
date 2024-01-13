@@ -36,6 +36,9 @@ export default function Timeline() {
   }, 15000);
 
   async function getNewPostsCount() {
+    if (!posts.length) {
+      return;
+    }
     const firstPost = posts.find((post) => !post.rePostId);
     const postId = firstPost.id;
     console.log("postId: ", postId);

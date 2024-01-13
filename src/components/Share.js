@@ -47,7 +47,7 @@ export default function Share({ post, setUpdatePosts, updatePosts, loading }) {
   return (
     <>
       <DivShare>
-        <IoIosShareAlt size={20} color="white" onClick={openModal} />
+        <IoIosShareAlt size={30} color="#ffffff" onClick={openModal} />
         <p>{post.countRePost}</p>
       </DivShare>
       <Modal

@@ -50,7 +50,7 @@ export default function SignUp() {
 
   const { email, password, name, repeatPassword, image } = infoSignUp;
   return (
-    <>
+    <DivSignUp>
       <CompleteHeader />
       <SignUPContent>
         <Conteiner>
@@ -128,11 +128,17 @@ export default function SignUp() {
           </Link>
         </Conteiner>
       </SignUPContent>
-    </>
+    </DivSignUp>
   );
 }
 
 // ------------------------------------------css
+const DivSignUp = styled.div`
+  @media (min-width: 800px) {
+    width: 100%;
+    display: flex;
+  }
+`;
 const SignUPContent = styled.div`
   width: 100%;
   height: fit-content;
@@ -140,6 +146,9 @@ const SignUPContent = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (min-width: 800px) {
+    width: 40%;
+  }
 `;
 const Conteiner = styled.div`
   width: 100%;
@@ -148,6 +157,9 @@ const Conteiner = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (min-width: 800px) {
+    height: 100vh;
+  }
 `;
 
 const DivMessage = styled.div`

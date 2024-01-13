@@ -126,7 +126,7 @@ const ConteinerSrcBar = styled.div`
   @media (min-width: 1300px) {
     input {
       height: 55px;
-      font-size: 20px;
+      font-size: 18px;
     }
     .src-box {
       .src-results {

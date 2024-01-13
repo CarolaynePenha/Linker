@@ -51,7 +51,12 @@ export default function Follow({ followers, id }) {
 const DivFollow = styled.div`
   display: flex;
   width: 130px;
-
+  @media (min-width: 800px) {
+    width: 150px;
+  }
+  @media (min-width: 1300px) {
+    width: 200px;
+  }
   button {
     width: 100%;
     height: 35px;
@@ -60,5 +65,9 @@ const DivFollow = styled.div`
     font-weight: 600;
     background-color: ${(props) => (props.following ? "white" : "#2A928E")};
     color: ${(props) => (props.following ? "#2A928E" : "white")};
+    @media (min-width: 800px) {
+      height: 40px;
+      font-size: 16px;
+    }
   }
 `;

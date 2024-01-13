@@ -114,6 +114,12 @@ const DivUserPage = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  @media (min-width: 800px) {
+    width: 50%;
+  }
+  @media (min-width: 1300px) {
+    width: 35%;
+  }
 
   strong {
     font-family: "Abril Fatface", serif;

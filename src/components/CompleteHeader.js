@@ -32,4 +32,30 @@ const Conteiner = styled.div`
     font-size: 30px;
     font-family: "Abril Fatface", serif;
   }
+  @media (min-width: 800px) {
+    height: 100vh;
+    width: 60%;
+    strong {
+      font-size: 45px;
+    }
+    p {
+      font-size: 26px;
+    }
+  }
+  @media (min-width: 1300px) {
+    strong {
+      font-size: 50px;
+    }
+    p {
+      font-size: 28px;
+    }
+  }
+  @media (min-width: 1700px) {
+    strong {
+      font-size: 60px;
+    }
+    p {
+      font-size: 32px;
+    }
+  }
 `;
